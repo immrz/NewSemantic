@@ -31,7 +31,7 @@ def read_vocab(fname):
     return vocab
 
 
-def read_sparse_matrix(list_file, vocab_file, use_tfidf=False):
+def read_sparse_matrix(list_file, vocab_file, use_tfidf=False, onehot=False):
     """
     Read a sparse term-document matrix from the given file.
 
@@ -60,6 +60,9 @@ def read_sparse_matrix(list_file, vocab_file, use_tfidf=False):
 
             parts = line.split()
             words, tf = parts[:-1], int(parts[-1])
+
+            if onehot:
+                tf = 1
 
             for w in words:
                 indices.append(vocab[w])
@@ -108,7 +111,7 @@ def apply_pca(mat, num_col, save_file):
 
 def apply_nmf(mat, num_col, save_file):
     print('Now applying nmf on the sparse matrix.')
-    nmf = NMF(n_components=num_col, init='nndsvda', solver='mu', random_state=59, alpha=0.1, max_iter=20, verbose=True)
+    nmf = NMF(n_components=num_col, init='random', solver='mu', random_state=59, alpha=0.1, max_iter=100, verbose=True)
 
     try:
         truncated = nmf.fit_transform(mat)
@@ -132,14 +135,14 @@ def main():
     list_file = ChineseList.LIST_FILE
     vocab_file = ChineseList.LIST_VOCAB
 
-    mat, _ = read_sparse_matrix(list_file, vocab_file)
+    mat, _ = read_sparse_matrix(list_file, vocab_file, onehot=True)
     assert mat.shape == (vocab_size, list_size), 'matrix shape not matched'
     t_mat = time.time()
     print('Reading lists and building the sparse matrix'
           ' take totally {:.3f}s.'.format(t_mat - t_start))
 
     # trunc_mat = apply_pca(mat, num_col, ChineseList.VECTORS)
-    trunc_mat = apply_nmf(mat, num_col, os.path.join(ChineseList.DATA_PATH, 'nmf_result.npy'))
+    trunc_mat = apply_nmf(mat, num_col, os.path.join(ChineseList.DATA_PATH, 'nmf_result_iter100.npy'))
     t_pca = time.time()
     print('The dimensionality reduction takes {:.3f}s.'.format(t_pca - t_mat))
     print('Before reduction, the shape is {}\n'

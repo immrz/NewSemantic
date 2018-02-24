@@ -108,17 +108,25 @@ def evaluate(mat, vocab, task):
         raise Exception('Undefined task here')
 
 
-def main():
-    # this matrix should be a sparse row-based one
-    mat, vocab = read_sparse_matrix(ChineseList.LIST_FILE, ChineseList.LIST_VOCAB, use_tfidf=True)
-
-    eval_dir = r'E:\users\v-rumao\codes\Sememe\SE-WRL-master\datasets'
-    eval_task = ['wordsim-240.txt', 'wordsim-297.txt', 'analogy.txt']
+def main(mat=None, vocab=None):
+    eval_dir = r'D:\Users\v-rumao\codes\Sememe\SE-WRL\datasets'
+    eval_task = ['wordsim-240.txt', 'wordsim-297.txt']
 
     eval_file = list(map(
         partial(os.path.join, eval_dir),
         eval_task
     ))
+
+    for task in eval_file:
+        print(task)
+
+    if mat is None or vocab is None:
+        # this matrix should be a sparse row-based one
+        mat, vocab = read_sparse_matrix(
+            ChineseList.LIST_FILE,
+            ChineseList.LIST_VOCAB,
+            onehot=True
+        )
 
     for task in eval_file:
         evaluate(mat, vocab, task)
