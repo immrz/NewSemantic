@@ -1,0 +1,1 @@
+from ChineseList.config import *
