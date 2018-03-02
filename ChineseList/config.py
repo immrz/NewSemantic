@@ -1,7 +1,7 @@
 import os
 
 RAW_LIST = r'E:\users\leifa\data\ch.list.count.txt'
-DATA_PATH = r'D:\Users\v-rumao\datasets\chinese_lists'
+DATA_PATH = r'E:\users\v-rumao\datasets\chinese_lists'
 
 _version = 4
 _filtered = 'filtered_{:02d}.txt'.format(_version)

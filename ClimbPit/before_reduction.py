@@ -109,7 +109,7 @@ def evaluate(mat, vocab, task):
 
 
 def main(mat=None, vocab=None):
-    eval_dir = r'D:\Users\v-rumao\codes\Sememe\SE-WRL\datasets'
+    eval_dir = r'E:\users\v-rumao\codes\Sememe\SE-WRL-master\datasets'
     eval_task = ['wordsim-240.txt', 'wordsim-297.txt']
 
     eval_file = list(map(
